@@ -1,0 +1,18 @@
+<%= error_messages_for(@project) %>
+<div class="card m-auto shadow-lg p-3 mb-5 bg-white rounded">
+  <div class="card-body">
+  <%= form_for(@project, class: "form-group row") do |form| %>
+
+    <%= form.label :title %>
+    <%= form.text_field :title, required:true, class: "form-control" %>
+
+    <%= form.label :description %>
+    <%= form.text_field :description, class: "form-control" %>
+
+
+
+    <%= form.submit class: "btn btn-primary m-2" %>
+
+  <% end %>
+  </div>
+</div>

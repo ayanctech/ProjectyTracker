@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AuthSystem</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <%= render "layouts/header" %>
+  <body style="padding: 75px;">
+
+    <section class="container" style="padding: 15px 0;">
+      <%= render "layouts/flash" %>
+    </section>
+
+    <%= yield %>
+
+  </body>
+  <%= render "layouts/footer" %>
+</html>

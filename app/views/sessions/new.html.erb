@@ -1,0 +1,19 @@
+<%= error_messages_for(@user) %>
+<div class="card w-50 m-auto shadow-lg p-3 mb-5 bg-white rounded">
+
+  <%= form_tag(sessions_path, class: "form-group row") do %>
+    <div class="card-body mb-10">
+      <%= label_tag :email %>
+      <%= email_field_tag :email, "", required:true, class: "form-control" %>
+
+      <%= label_tag :password %>
+      <%= password_field_tag :password, "", required:true, class: "form-control" %>
+    <div>
+    <div class="card-footer">
+      <%= submit_tag("Log In" , name: nil, class: "btn btn-primary")  %>
+      <%= link_to "Back", users_path, class: "btn btn-dark " %>
+    </div>
+  <% end %>
+
+  <a class="btn btn-lg btn-primary" href="<%= @login_url %>" role="button" id="connect-button">Connect to Outlook</a>
+</div>

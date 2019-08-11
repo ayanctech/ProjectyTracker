@@ -1,0 +1,22 @@
+<%= error_messages_for(@project) %>
+<div class="card m-auto shadow-lg p-3 mb-5 bg-white rounded">
+  <div class="card-body">
+  <%= form_for([@project, @project.tasks.build], class: "form-group row") do |form| %>
+
+    <%= form.label :name %>
+    <%= form.text_field :name, required:true, class: "form-control" %>
+
+    <%= form.label :desc %>
+    <%= form.text_field :desc, class: "form-control" %>
+
+    <%= form.label :completed %>
+    <%= form.check_box :completed, class: "form-control" %>
+
+    <%= form.label :due_date %>
+    <%= form.date_select :due_date, class: "form-control" %>
+
+    <%= form.submit class: "btn btn-primary m-2" %>
+
+  <% end %>
+  </div>
+</div>
