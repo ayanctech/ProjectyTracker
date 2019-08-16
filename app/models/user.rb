@@ -20,6 +20,16 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
+
+  def self.find_or_create_from_auth_hash(auth)
+		where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
+      user.name = auth.extra.raw_info.displayName
+			user.email = auth.extra.raw_info.userPrincipalName
+      user.password=auth.uid
+			user.save!
+		end
+	end
+
   private
   def sanitize_name
     self.name=self.name.titleize

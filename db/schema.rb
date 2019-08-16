@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_09_103959) do
+ActiveRecord::Schema.define(version: 2019_08_15_190028) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -33,14 +33,22 @@ ActiveRecord::Schema.define(version: 2019_08_09_103959) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "desc"
+    t.string "feature_id"
+    t.bigint "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_features_on_project_id"
+  end
+
   create_table "projects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "feature"
-    t.text "feature_description"
     t.index ["title"], name: "index_projects_on_title", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -56,16 +64,18 @@ ActiveRecord::Schema.define(version: 2019_08_09_103959) do
 
   create_table "tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.string "desc"
     t.boolean "completed"
-    t.datetime "due_date"
-    t.bigint "project_id"
+    t.bigint "feature_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.bigint "user_id"
+    t.index ["feature_id"], name: "index_tasks_on_feature_id"
+    t.index ["user_id"], name: "fk_rails_4d2a9e4d7e"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
     t.string "name"
     t.string "email"
     t.string "password_digest"
@@ -77,6 +87,8 @@ ActiveRecord::Schema.define(version: 2019_08_09_103959) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "features", "projects"
   add_foreign_key "projects", "users"
-  add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "features"
+  add_foreign_key "tasks", "users"
 end

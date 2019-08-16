@@ -15,5 +15,5 @@
     </div>
   <% end %>
 
-  <a class="btn btn-lg btn-primary" href="<%= @login_url %>" role="button" id="connect-button">Connect to Outlook</a>
+  <%= link_to "sign in via Outlook", auth_signin_path, class: "btn btn-primary" %>
 </div>

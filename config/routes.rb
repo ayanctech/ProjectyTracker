@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
 
+
   resources :projects do
-    resources :tasks
+    resources :features, shallow: true do
+      resources :tasks
+    end
   end
-  
+
   root "users#index"
   resources :users do
     member do
@@ -11,7 +14,11 @@ Rails.application.routes.draw do
     end
   end
   resources :sessions
-  get "authorize" => "auth#gettoken"
+
+  # Add route for OmniAuth callback
+  match '/auth/:provider/callback', to: 'auth#callback', via: [:get, :post]
+  get 'auth/signin'
+  get 'auth/signout'
   #get "signup", to: "users#new", as: "signup"
   #get "login", to: "sessions#new", as: "login"
   #get "logout", to: "sessions#destroy", as: "logout"

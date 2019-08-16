@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  desc: MyString
+  feature_id: MyString
+  Project: MyString
+  references: MyString
+
+two:
+  name: MyString
+  desc: MyString
+  feature_id: MyString
+  Project: MyString
+  references: MyString

@@ -1,0 +1,20 @@
+<%= error_messages_for(feature) %>
+<div class="card m-auto shadow-lg p-3 mb-5 bg-white rounded">
+  <div class="card-body">
+  <%= form_for [feature, feature.tasks.build], class: "form-group row"  do |builder| %>
+
+      <%= builder.label :name %>
+      <%= builder.text_field :name, required: true %>
+
+      <%= builder.label :desc %>
+      <%= builder.text_field :desc %>
+
+      <%= builder.label :feature_id, "Select the Project for this task:" %><br>
+      <%= builder.collection_select :feature_id, Feature.all, :id, :name %>
+
+
+      <%= builder.submit class: "btn btn-primary m-2" %>
+
+  <% end %>
+  </div>
+</div>

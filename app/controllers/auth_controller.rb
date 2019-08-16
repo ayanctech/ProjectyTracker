@@ -1,10 +1,26 @@
 class AuthController < ApplicationController
-  include AuthHelper
+  
+  def signin
+    redirect_to '/auth/microsoft_graph_auth'
+  end
 
-  def gettoken
-    token = get_token_from_code params[:code]
-    session[:azure_token] = token.to_hash
-    redirect_to users_path
+  def callback
+    # Access the authentication hash for omniauth
+    data = request.env['omniauth.auth']
+    @user = User.find_or_create_from_auth_hash(request.env["omniauth.auth"])
+    session[:user_id]=@user.id
+    # Temporary for testing!
+    #render json: data.to_json
+
+    save_in_session data
+
+    redirect_to root_url
+
+  end
+
+  def signout
+    reset_session
+    redirect_to root_url
   end
 
 end

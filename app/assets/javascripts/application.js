@@ -17,6 +17,7 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
 }
@@ -24,35 +25,3 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
-
-function toggleVisibility(id) {
-      alert("From headquarters!");
-          var x = document.getElementById(id);
-          if (x.style.display === "none") {
-            x.style.display = "inline";
-          } else {
-            x.style.display = "none";
-          }
-        }
-//##############new style
-        let $cards = $('.cardWrap');
-
-        // Card Closer
-        $cards.on('close.bs.alert', function(e) {
-          // prevent card from being removed
-          e.preventDefault();
-          // hide card
-          $(this).addClass('hidden');
-        });
-
-        // Card Buttons
-        $('.cardSelect').on('click', function() {
-          let cardIndex = $(this).index();
-          if (!cardIndex) {
-            // show all cards (overview)
-            $cards.removeClass('hidden');
-          } else {
-            // toggle one card
-            $cards.eq(cardIndex - 1).toggleClass('hidden');
-          }
-        });

@@ -11,24 +11,23 @@
 </p>
 
 <%= link_to "Back", projects_path, class: "btn btn-light" %>
-<br>
 <%= link_to "Edit", edit_project_path(@project), class: "btn btn-light" %>
 <br>
 
 <div id="container">
   <div id="mySidenav" class="sidenav">
 
-    <a class="active" href="#home">Overview</a>
-    <a href="#" onclick="$('.c1').show()">Card1</a>
-    <a href="#" onclick="$('.c2').show()">Card2</a>
-    <a href="#" onclick="$('.c3').show()">Card3</a>
+    <a  style="font-size:30px;cursor:pointer" onclick="closeNav()">&#9776; collapse</a>
+    <a  data-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1">Card1</a>
+    <a  data-toggle="collapse" href="#card2" role="button" aria-expanded="false" aria-controls="card2">Card2</a>
+    <a  data-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card3">Card3</a>
   </div>
 
   <div class="row">
-    <div class="col-md-4 c1" id="card1" >
+    <div class="col m-0 p-0 collapse show" id="card1" >
       <div class="card">
         <div class="card-body">
-          <a  id="hide" class="close" data-hide="c1"  id="hide">&times;</a>
+          <a  href="#card2" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <h5 class="card-title">Current Iteration</h5>
 
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -37,14 +36,14 @@
       </div>
     </div>
 
-    <div class="col-md-4 c2" id="card2">
+    <div class="col m-0 p-0 collapse show" id="card2">
       <div class="card">
         <div class="card-body">
-          <a  class="close" data-hide="c2" id="hide">&times;</a>
+          <a  href="#card2" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <h5 class="card-title">Backlog</h5>
 
           <div class="card-text">
-            <%= render @project.tasks %>
+
           </div>
           <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
               &plus; Add Feature
@@ -54,21 +53,33 @@
             <%= render "feature" %>
           </div>
 
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseTask" aria-expanded="false" aria-controls="collapseTask">
-              &plus; Add Task
-          </button>
-          <div class="collapse" id="collapseTask">
-            <%= render "tasks/form" %>
+          <% @project.features.each do |fet| %>
+
+            <div class="card p-2">
+              <%= "#{fet.name} #{fet.id}" %>
+              <% unless fet.nil? %>
+                <%= link_to "Add task", new_feature_task_path(fet) %>
+              <% end %>
+
+              <div class="card-body">
+                <% fet.tasks.each do |t| %>
+                  <%= "#{t.name}" %>
+                  <%= "#{t.completed}" %>
+                  <%= "#{t.user_id}" %>
+                <% end %>
+              </div>
           </div>
+
+          <% end %>
 
         </div>
       </div>
     </div>
 
-    <div class="col-md-4 c3" id="card3">
+    <div class="col m-0 p-0 collapse show" id="card3">
       <div class="card">
         <div class="card-body">
-          <a  class="close" data-hide="c3">&times;</a>
+          <a  href="#card3" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <h5 class="card-title">Icebox</h5>
 
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

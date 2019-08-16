@@ -9,15 +9,19 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    @project.features.build
+
   end
 
   def show
+    @feature=@project.features.build
+    @feature.feature_id=auto_generate_id
+    #@project.features.build.tasks.build
   end
 
   def create
     @project = Project.new(project_params)
-    params[:description] == nil
-      @project.description = nil
+
     @project.user = current_user
 
     if @project.save
@@ -50,6 +54,9 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
   def project_params
-    params.require(:project).permit(:title, :description, :task)
+    params.require(:project).permit(:title, :description, :features_attributes => [:name], :tasks_attributes => [:name])
+  end
+  def auto_generate_id
+    SecureRandom.random_number(1_000_000)
   end
 end

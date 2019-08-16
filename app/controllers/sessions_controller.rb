@@ -1,8 +1,7 @@
 class SessionsController < ApplicationController
-  include AuthHelper
+
 
   def new
-    @login_url = get_login_url
   end
 
   def create
