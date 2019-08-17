@@ -2,10 +2,13 @@ Rails.application.routes.draw do
 
 
   resources :projects do
+    resources :comments, shallow: true
     resources :features, shallow: true do
-      resources :tasks
+      resources :tasks, shallow: true
     end
   end
+
+
 
   root "users#index"
   resources :users do

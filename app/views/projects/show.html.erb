@@ -55,13 +55,13 @@
 
           <% @project.features.each do |fet| %>
 
-            <div class="card p-2">
+            <div class="card p-2 alert-warning">
               <%= "#{fet.name} #{fet.id}" %>
-              <% unless fet.nil? %>
-                <%= link_to "Add task", new_feature_task_path(fet) %>
-              <% end %>
 
-              <div class="card-body">
+
+
+              <div class="card-body alert-info">
+                All Tasks
                 <% fet.tasks.each do |t| %>
                   <%= "#{t.name}" %>
                   <%= "#{t.completed}" %>
@@ -70,6 +70,22 @@
               </div>
           </div>
 
+          <% end %>
+
+          <div class="card">
+
+            <div>
+              <%= render "comment" %>
+            </div>
+          </div>
+
+          Comments:
+          <% @project.comments.order("updated_at DESC").each do |com| %>
+            <div class="card">
+              <strong><%= "#{com.commenter_name}" %></strong>
+              <%= "#{com.content}" %>
+              <em><%= "#{com.updated_at}" %></em>
+            </div>
           <% end %>
 
         </div>
