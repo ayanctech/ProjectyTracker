@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_16_162158) do
+ActiveRecord::Schema.define(version: 2019_08_26_110002) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -40,18 +40,33 @@ ActiveRecord::Schema.define(version: 2019_08_16_162158) do
     t.bigint "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category", null: false
     t.index ["project_id"], name: "index_comments_on_project_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "desc"
-    t.string "feature_id"
+    t.string "feature_token_id"
     t.bigint "project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category", null: false
+    t.string "file_field"
+    t.string "status", default: "Started"
     t.index ["project_id"], name: "index_features_on_project_id"
+  end
+
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "notify_name", null: false
+    t.bigint "feature_id"
+    t.bigint "comment_id"
+    t.string "recipient"
+    t.index ["comment_id"], name: "index_notifications_on_comment_id"
+    t.index ["feature_id"], name: "index_notifications_on_feature_id"
   end
 
   create_table "projects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -74,7 +89,7 @@ ActiveRecord::Schema.define(version: 2019_08_16_162158) do
   end
 
   create_table "tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.boolean "completed"
     t.bigint "feature_id"
     t.datetime "created_at", null: false
@@ -87,8 +102,8 @@ ActiveRecord::Schema.define(version: 2019_08_16_162158) do
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "provider"
     t.string "uid"
-    t.string "name"
-    t.string "email"
+    t.string "name", null: false
+    t.string "email", null: false
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

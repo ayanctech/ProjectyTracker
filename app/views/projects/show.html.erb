@@ -1,159 +1,101 @@
+
 <h2>PROJECT Dashboard</h2>
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
-<p>
-  <strong>Name:</strong>
-  <%= @project.title %>
-</p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @project.description %>
-</p>
-
-<%= link_to "Back", projects_path, class: "btn btn-light" %>
-<%= link_to "Edit", edit_project_path(@project), class: "btn btn-light" %>
-<br>
+<div id="mySidenav" class="sidenav">
+  <a class="btn btn-light" onclick="closeNav()">&#8612; collapse</a>
+  <a data-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1">Current Iteration</a>
+  <a data-toggle="collapse" href="#card2" role="button" aria-expanded="false" aria-controls="card2">Backlog</a>
+  <a data-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card3">Icebox</a>
+</div>
 
 <div id="container">
-  <div id="mySidenav" class="sidenav">
-
-    <a  style="font-size:30px;cursor:pointer" onclick="closeNav()">&#9776; collapse</a>
-    <a  data-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1">Card1</a>
-    <a  data-toggle="collapse" href="#card2" role="button" aria-expanded="false" aria-controls="card2">Card2</a>
-    <a  data-toggle="collapse" href="#card3" role="button" aria-expanded="false" aria-controls="card3">Card3</a>
-  </div>
 
   <div class="row">
-    <div class="col m-0 p-0 collapse show" id="card1" >
-      <div class="card">
-        <div class="card-body">
-          <a  href="#card2" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <h5 class="card-title">Current Iteration</h5>
-
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
+    <div class="col-sm-2 p-1">
+      <span class="btn btn-secondary" onclick="openNav()">&#9776; open</span>
+      <%= link_to "Edit", edit_project_path(@project), class: "btn btn-outline-dark" %>
+    </div>
+    <div class="col-sm-5 p-1">
+      <span class="btn btn-outline-success"><strong>Name: </strong><%= @project.title %></span>
+      <span class="btn btn-outline-warning"><strong>Description: </strong><%= @project.description %></span>
     </div>
 
-    <div class="col m-0 p-0 collapse show" id="card2">
-      <div class="card">
-        <div class="card-body">
-          <a  href="#card2" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <h5 class="card-title">Backlog</h5>
+    <div class="col-sm-5 p-1">
+      <%= form_tag(@project,method: :get, class: "form-inline mb-3") do %>
+        <%= text_field_tag :search, params[:search], class: "search-text form-control" %>
+        <%= submit_tag "Search", name: nil, class: "search-button btn btn-primary mr-1 ml-1" %>
+        <%= link_to "Reset", @project, class: "btn btn-danger mr-1 ml-1" %>
+      <% end %>
+    </div>
+  </div>
 
-          <div class="card-text">
+  <div class="row mt-1">
+    <% if params[:search].present? && params[:search].strip.length > 0 %>
+      <div class="col-sm-12 mb-5 p-0 collapse show height-dictator" id="card0" >
 
-          </div>
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              &plus; Add Feature
-          </button>
-
-          <div class="collapse" id="collapseExample">
-            <%= render "feature" %>
-          </div>
-
-          <% @project.features.each do |fet| %>
-
-            <div class="card p-2 alert-warning">
-              <%= "#{fet.name} #{fet.id}" %>
-
-
-
-              <div class="card-body alert-info">
-                All Tasks
-                <% fet.tasks.each do |t| %>
-                  <%= "#{t.name}" %>
-                  <%= "#{t.completed}" %>
-                  <%= "#{t.user_id}" %>
+        <div class="card">
+          <div class="card-body">
+            <% @project.features.where("name LIKE ? or feature_token_id LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%").each do |fet| %>
+              <div class="card p-2 alert-warning shadow shadow-regular mb-2 p-5">
+                <p class="btn btn-outline-info"><%= "Feature Name: #{fet.name} Feature Token:  #{fet.feature_token_id} " %></p>
+                <p class="btn btn-outline-success"><%= "category:  #{fet.category}" %></p>
+                <% div_fet_id="editFeature"+fet.feature_token_id.to_s %>
+                <%= hashed_div_fet_id="#"+div_fet_id %>
+                <%= tag.div class: "mt-1 mb-1 card alert-info", "data-toggle": "collapse", "data-target": hashed_div_fet_id, "aria-expanded": "false", "aria-controls": div_fet_id do %>
+                  &#9658;<%= "Name: #{fet.name}, Id: #{fet.id} status: #{fet.status}" %>
                 <% end %>
+
+                <%= tag.div class: "collapse", id: div_fet_id do %>
+                  <%= render "feature_edit" , fid: fet.id %>
+                <% end %>
+
+              <div class="card p-2 alert-warning">
+                <%= content_tag :div do -%>
+                  Attachments:
+                  <% if fet.file.attached? %>
+                    <%= link_to fet.file.filename, rails_blob_path(fet.file, disposition: "attachment")%>
+                  <% else %>
+                    No file attached
+                  <% end %>
+                <% end -%>
+
+                <%= content_tag :div  do -%>
+                  <br>
+                  <%= render plain: "Completed Tasks" if fet.tasks.present? %>
+                  <div class="card-body alert-success">
+                    <% fet.tasks.where("completed =?","1").each do |t| %>
+                      <%= "Task: #{t.name}" %> <%="Completed: #{t.completed}" %>
+                      <br>
+                    <% end %>
+                  </div>
+                <% end -%>
               </div>
-          </div>
-
-          <% end %>
-
-          <div class="card">
-
-            <div>
-              <%= render "comment" %>
             </div>
+
+            <% end %>
+
           </div>
-
-          Comments:
-          <% @project.comments.order("updated_at DESC").each do |com| %>
-            <div class="card">
-              <strong><%= "#{com.commenter_name}" %></strong>
-              <%= "#{com.content}" %>
-              <em><%= "#{com.updated_at}" %></em>
-            </div>
-          <% end %>
-
         </div>
+
       </div>
+    <% end %>
+
+    <div class="col m-0 p-0 collapse show height-dictator" id="card1" >
+
+      <%= render partial: "show_panel", locals: { category_name: "Current Iteration", card_no: "1" } %>
+
     </div>
 
-    <div class="col m-0 p-0 collapse show" id="card3">
-      <div class="card">
-        <div class="card-body">
-          <a  href="#card3" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <h5 class="card-title">Icebox</h5>
+    <div class="col m-0 p-0 collapse show height-dictator" id="card2">
+      <%= render partial: "show_panel", locals: { category_name: "Backlog", card_no: "2" } %>
 
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
+    </div>
+
+    <div class="col m-0 p-0 collapse show height-dictator" id="card3">
+      <%= render partial: "show_panel", locals: { category_name: "Icebox", card_no: "3" } %>
+
     </div>
 
   </div>
+
 </div>
-
-<!--
-<div id="container">
-
-  <div id="mySidenav" class="sidenav">
-    <button class="cardSelect">Overview</button>
-    <button class="cardSelect">Card1</button>
-    <button class="cardSelect">Card2</button>
-    <button class="cardSelect">Card3</button>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4 cardWrap" id="card1">
-      <div class="card">
-        <div class="card-body">
-          <p><a href="#card1" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
-          <h5 class="card-title">Card Num 1</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 cardWrap" id="card2">
-      <div class="card">
-        <div class="card-body">
-          <p><a href="#card2" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          </p>
-          <h5 class="card-title">Card Num 2</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 cardWrap" id="card3">
-      <div class="card">
-        <div class="card-body">
-          <p>
-            <a href="#card3" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          </p>
-          <h5 class="card-title">Card Num 3</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
--->

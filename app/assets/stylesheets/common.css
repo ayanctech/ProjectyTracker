@@ -1,5 +1,16 @@
 body{
-  padding: 0 2vw;
+  padding: 0 1.5vw;
+}
+nav{
+  background-color: #e3f2fd;
+}
+
+.drop-content{
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 40vh;
+  overflow: auto;
 }
 .sidenav {
   height: 100%;
@@ -29,13 +40,20 @@ body{
   color: #f1f1f1;
 }
 
-.sidenav .closebtn {
-  position: absolute;
-  right: 0px;
-  font-size: 36px;
-  margin-left: 50px;
-}
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+}
+
+.comment-card{
+  border: 1.5px solid red;
+}
+
+@media screen and (min-width: 768px){
+  .height-dictator{
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    overflow: auto;
+  }
 }

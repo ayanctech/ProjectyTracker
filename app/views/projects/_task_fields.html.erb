@@ -1,0 +1,16 @@
+<div class="alert-success p-2 mt-1">
+  <div class="form-group form-check">
+    <%= f.check_box :completed, class: "form-check-input" %>
+    <%= f.text_field :name, required:true, class: "form-control", placeholder: "Enter Task name..." %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :user_id, "Select the User to Assign this task:" %><br>
+    <%= f.collection_select :user_id, User.all, :id, :name,{}, {class: "form-control chosen-select"}  %>
+  </div>
+
+</div>
+
+<script>
+  $('.chosen-select').chosen({width: '150px'});
+</script>

@@ -1,9 +1,18 @@
 class ProjectsController < ApplicationController
   before_action :login_required
-  before_action :set_project, only: [:edit, :update, :destroy, :show]
+  before_action :set_project, only: [:edit, :update, :destroy, :show, :find_feature]
+
+
+  def search_feature
+    @project.features.search(params[:search])
+  end
 
   def index
-    @projects = Project.all.order('created_at DESC')
+    if params[:search]
+      @projects=Project.search(params[:search])
+    else
+      @projects = Project.all.order('created_at DESC')
+    end
     @project = Project.new
   end
 
@@ -14,9 +23,13 @@ class ProjectsController < ApplicationController
 
   def show
     @feature=@project.features.build
-    @feature.feature_id=auto_generate_id
     @comment=@project.comments.build
-    
+
+    @feature.tasks.build
+    @feature.notifications.build
+
+    @comment.notifications.build
+    #binding.pry
   end
 
   def create
@@ -36,7 +49,8 @@ class ProjectsController < ApplicationController
 
   def update
 
-    if @project.update(params[:project].permit(:title, :body))
+    #if @project.update(params[:project].permit(:title, :body))
+    if @project.update(project_params)
       redirect_to project_path(@project),flash: { success: "Project Updated Successfully!" }
     else
       render 'edit'
@@ -54,9 +68,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
   def project_params
-    params.require(:project).permit(:title, :description, :features_attributes => [:name], :comments_attributes => [:content, :commenter_name] ,:tasks_attributes => [:name])
+    params.require(:project).permit(:title, :description, :search, features_attributes: [:name,tasks_attributes: [:name]], comments_attributes: [:content])
   end
-  def auto_generate_id
-    SecureRandom.random_number(1_000_000)
-  end
+
 end

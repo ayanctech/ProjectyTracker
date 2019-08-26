@@ -10,6 +10,8 @@ gem 'oauth2'
 gem 'activerecord-session_store'
 
 gem 'omniauth-microsoft_graph'
+gem 'redis', '~> 4.0'
+gem 'pry', '~> 0.12.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
 # Use mysql as the database for Active Record
@@ -22,6 +24,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
+
+gem 'chosen-rails'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

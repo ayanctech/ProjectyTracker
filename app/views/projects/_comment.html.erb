@@ -1,12 +1,13 @@
 <%= error_messages_for(@comment) %>
-<div class="card m-auto shadow-lg p-3 mb-5 bg-white rounded">
+<div class="card m-auto p-3 mb-5 bg-white rounded">
   <div class="card-body">
   <%= form_for [@project, @comment], class: "form-group inline", remote: true  do |builder| %>
+  <%= builder.hidden_field :category, class: "form-control", value: category_value %>
+    <%= builder.label :content, "Comment Here" %>
+    <%= builder.text_field :content, required: true, class: "form-control" %>
+    <%= builder.hidden_field :commenter_name, value: current_user.name %>
 
-      <%= builder.label :content, "Comment Here" %>
-      <%= builder.text_field :content, required: true, class: "form-control" %>
-      <%= builder.hidden_field :commenter_name, value: current_user.name %>
-      <%= builder.submit class: "btn btn-primary m-2" %>
+    <%= builder.submit class: "btn btn-primary m-2" %>
 
   <% end %>
   </div>

@@ -1,3 +1,4 @@
+
 <p>
   <strong>Name:</strong>
   <%= @user.name %>
@@ -8,6 +9,8 @@
   <%= @user.email %>
 </p>
 
-<%= link_to "Back", users_path, class: "btn btn-light" %>
-<br>
-<%= link_to "Edit", edit_user_path(@user), class: "btn btn-light" %>
+<%= link_to "Back", users_path, class: "btn btn-outline-info" %>
+
+<% if @user.email == current_user.email %>
+  <%= link_to "Edit", edit_user_path(@user), class: "btn btn-outline-warning" %>
+<% end %>

@@ -1,16 +1,31 @@
 <%= error_messages_for(@project) %>
-<div class="card m-auto shadow-lg p-3 mb-5 bg-white rounded">
+<div class="card shadow-sm p-3 mb-5 bg-white rounded">
   <div class="card-body">
-  <%= form_for [@project, @feature], class: "form-group row"  do |builder| %>
+    <%= form_for [@project, @feature], class: "form-group inline", remote: true  do |builder| %>
+        <%= builder.hidden_field :feature_token_id, value: auto_generate_id %>
 
-      <%= builder.label :name %>
-      <%= builder.text_field :name, required: true, class: "form-control" %>
+        <%= builder.hidden_field :category, class: "form-control", value: category_value %>
 
-      <%= builder.label :desc, "Description" %>
-      <%= builder.text_field :desc, class: "form-control" %>
-      
-      <%= builder.submit class: "btn btn-primary m-2" %>
+        <%= builder.label :name %>
+        <%= builder.text_field :name, required: true, class: "form-control" %>
 
-  <% end %>
+        <%= builder.label :desc, "Description" %>
+        <%= builder.text_field :desc, class: "form-control" %>
+        <br>
+
+        <%= builder.label :file, "Add files" %>
+        <%= builder.file_field :file %>
+        <br><br>
+
+        <% submit_tag "Add Task", type: "button", id: "addAddress",onclick: 'addTasksField()'%>
+
+
+        <%= link_to_add_fields "Add Field", builder, :tasks %>
+
+
+        <%= builder.submit class: "btn btn-primary m-2" %>
+
+    <% end %>
+
   </div>
 </div>

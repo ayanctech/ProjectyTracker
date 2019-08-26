@@ -1,0 +1,42 @@
+<%= error_messages_for(@project) %>
+<div class="card shadow-sm p-3 mb-5 bg-white rounded">
+  <div class="card-body">
+    <%= form_for [@project,Feature.find(fid)], class: "form-group", remote: true  do |builder| %>
+        Token<%= builder.text_field :feature_token_id, class: "form-control form-control-sm", readonly: true %>
+
+        <%= builder.hidden_field :category, class: "form-control"%>
+
+        <%= builder.label :name %>
+        <%= builder.text_field :name, required: true, class: "form-control" %>
+
+        <%= builder.label :desc, "Description" %>
+        <%= builder.text_field :desc, class: "form-control" %>
+
+
+        <%= builder.fields_for :tasks, remote: true do |form| %>
+          <%= render "task_fields", f: form %>
+        <% end %>
+
+        <br>
+
+        <%= builder.label :file, "Add files" %>
+        <%= builder.file_field :file %>
+        <br><br>
+
+        <%= builder.label :status, "Change status" %>
+        <%= builder.select :status, options_for_select(["Started","Finished","Delivered"]) %>
+        <br>
+        <%= link_to_add_fields "Add Task", builder, :tasks %>
+
+        <%= builder.submit class: "btn btn-primary m-2" %>
+
+
+
+    <% end %>
+
+  </div>
+</div>
+
+<script>
+  $('.chosen-select').chosen({width: '100px'});
+</script>

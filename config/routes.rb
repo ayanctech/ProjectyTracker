@@ -2,15 +2,21 @@ Rails.application.routes.draw do
 
 
   resources :projects do
-    resources :comments, shallow: true
-    resources :features, shallow: true do
-      resources :tasks, shallow: true
-    end
+    resources :comments
+    resources :features
   end
 
+  resources :features do
+    resources :tasks
+    resources :notifications
+  end
 
+  resources :comments do
+    resources :notifications
+  end
 
-  root "users#index"
+  root "projects#index"
+  
   resources :users do
     member do
       get :confirm_email
@@ -19,12 +25,11 @@ Rails.application.routes.draw do
   resources :sessions
 
   # Add route for OmniAuth callback
-  match '/auth/:provider/callback', to: 'auth#callback', via: [:get, :post]
-  get 'auth/signin'
-  get 'auth/signout'
-  #get "signup", to: "users#new", as: "signup"
-  #get "login", to: "sessions#new", as: "login"
-  #get "logout", to: "sessions#destroy", as: "logout"
+  match "/auth/:provider/callback", to: "auth#callback", via: [:get, :post]
+  get "auth/signin"
+  get "auth/signout"
+
+  mount ActionCable.server => "/cable"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

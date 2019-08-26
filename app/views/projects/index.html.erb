@@ -3,10 +3,10 @@
 
 <div class="row searcher">
   <div class="col-md-6">
-    <%= form_tag(users_path,method: :get, class: "form-inline mb-3") do %>
+    <%= form_tag(projects_path,method: :get, class: "form-inline mb-3") do %>
       <%= text_field_tag :search, params[:search], class: "form-control" %>
       <%= submit_tag("Search" , name: nil, class: "btn btn-primary mr-1 ml-1") %>
-      <%= link_to "Reset", users_path, class: "btn btn-danger mr-1 ml-1" %>
+      <%= link_to "Reset", projects_path, class: "btn btn-danger mr-1 ml-1" %>
     <% end %>
   </div>
   <div class="col-md-6">
@@ -32,7 +32,7 @@
       <tr>
         <td><%= p.title %></td>
         <td><%= p.description  %></td>
-        <td><%= link_to "Show", p, class: "link-option" %></td>
+        <td><%= link_to "Show", p, class: "link-option", target: :_blank %></td>
         <td><%= link_to "Edit", edit_project_path(p), class: "link-option" %></td>
         <td><%= link_to "Destroy", p, method: :delete, data: { confirm: "Are you sure?" }, class: "link-option" %></td>
       </tr>

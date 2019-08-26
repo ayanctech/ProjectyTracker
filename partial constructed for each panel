@@ -1,0 +1,70 @@
+      <div class="card border border-dark">
+        <div class="card-body">
+          <a  data-toggle="collapse" href="#card1" role="button" aria-expanded="false" aria-controls="card1">&times; Close</a>
+          <h5 class="card-title">Current Iteration</h5>
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFeature1" aria-expanded="false" aria-controls="collapseFeature1">
+              &plus; Add Feature
+          </button>
+
+          <div class="collapse" id="collapseFeature1">
+            <%= render partial: "feature", locals: { category_value: "Current Iteration" } %>
+          </div>
+          <br>
+          <% @project.features.where("category LIKE ?", "Current Iteration").each do |fet| %>
+            <% div_fet_id="editFeature"+fet.id.to_s %>
+            <%= hashed_div_fet_id="#"+div_fet_id %>
+            <%= tag.div class: "mt-1 mb-1 card alert-info", "data-toggle": "collapse", "data-target": hashed_div_fet_id, "aria-expanded": "false", "aria-controls": div_fet_id do %>
+              &#9658;<%= "Name: #{fet.name}, Id: #{fet.id} status: #{fet.status}" %>
+          <% end %>
+
+
+          <%= tag.div class: "collapse", id: div_fet_id do %>
+            <%= render "feature_edit" , fid: fet.id %>
+          <% end %>
+
+            <div class="card p-2 alert-warning">
+              <%= link_to "Destroy", feature_path(fet, project_id: @project.id), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm w-25" %>
+
+              <%= content_tag :div do -%>
+                Attachments:
+                <% if fet.file.attached? %>
+                  <%= link_to fet.file.filename, rails_blob_path(fet.file, disposition: "attachment")%>
+                <% else %>
+                  No file attached
+                <% end %>
+
+              <% end -%>
+
+              <%= content_tag :div  do -%>
+              <br>
+                <%= render plain: "Completed Tasks" if fet.tasks.present? %>
+                <div class="card-body alert-success">
+                  <% fet.tasks.where("completed =?","1").each do |t| %>
+                    <%= "Task: #{t.name}" %> <%="Completed: #{t.completed}" %>
+                    <br>
+                  <% end %>
+               </div>
+              <% end -%>
+
+            </div>
+
+          <% end %>
+
+          <div class="card border border-primary">
+
+            <div>
+              <%= render partial: "comment", locals: { category_value: "Current Iteration" } %>
+            </div>
+          </div>
+
+          Comments:
+          <% @project.comments.where("category LIKE ?", "Current Iteration").order("updated_at DESC").each do |com| %>
+            <div class="card border-bottom rounded shadow-lg  m-1 p-1">
+              <strong><%= "#{com.commenter_name}" %></strong>
+              <%= "#{com.content}" %>
+              <em><%= "#{com.updated_at}" %></em>
+            </div>
+          <% end %>
+
+        </div>
+      </div>

@@ -1,11 +1,13 @@
 class User < ApplicationRecord
   before_create :confirmation_token
 
+  has_many :notifications
+
   has_secure_password
   validates :password, length: { minimum: 6 }
 
   has_many :projects, dependent: :destroy
-  #has_many :tasks, dependent: :destroy
+
 
   validates :name,presence: true
   validates :email, presence: true, uniqueness: true, format: { with: /\A[0-9a-zA-Z\.]+\@[a-zA-Z]+\.[a-zA-Z]+\z/}

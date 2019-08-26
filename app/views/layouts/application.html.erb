@@ -5,14 +5,13 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_link_tag    'common', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track": "reload" %>
+    <%= stylesheet_link_tag    "common", media: "all", "data-turbolinks-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbolinks-track": "reload" %>
+    
   </head>
   <%= render "layouts/header" %>
   <body class="container pt-3 mt-5">
-
     <section class="container">
       <%= render "layouts/flash" %>
     </section>
@@ -20,5 +19,5 @@
     <%= yield %>
 
   </body>
-  <%= render "layouts/footer" %>
+
 </html>
