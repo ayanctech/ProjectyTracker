@@ -1,16 +1,14 @@
 class AuthController < ApplicationController
-  
+
   def signin
-    redirect_to '/auth/microsoft_graph_auth'
+    redirect_to "/auth/microsoft_graph_auth"
   end
 
   def callback
     # Access the authentication hash for omniauth
-    data = request.env['omniauth.auth']
+    data = request.env["omniauth.auth"]
     @user = User.find_or_create_from_auth_hash(request.env["omniauth.auth"])
     session[:user_id]=@user.id
-    # Temporary for testing!
-    #render json: data.to_json
 
     save_in_session data
 

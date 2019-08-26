@@ -32,70 +32,69 @@
   <div class="row mt-1">
     <% if params[:search].present? && params[:search].strip.length > 0 %>
       <div class="col-sm-12 mb-5 p-0 collapse show height-dictator" id="card0" >
-
-        <div class="card">
-          <div class="card-body">
-            <% @project.features.where("name LIKE ? or feature_token_id LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%").each do |fet| %>
-              <div class="card p-2 alert-warning shadow shadow-regular mb-2 p-5">
-                <p class="btn btn-outline-info"><%= "Feature Name: #{fet.name} Feature Token:  #{fet.feature_token_id} " %></p>
-                <p class="btn btn-outline-success"><%= "category:  #{fet.category}" %></p>
-                <% div_fet_id="editFeature"+fet.feature_token_id.to_s %>
-                <%= hashed_div_fet_id="#"+div_fet_id %>
-                <%= tag.div class: "mt-1 mb-1 card alert-info", "data-toggle": "collapse", "data-target": hashed_div_fet_id, "aria-expanded": "false", "aria-controls": div_fet_id do %>
-                  &#9658;<%= "Name: #{fet.name}, Id: #{fet.id} status: #{fet.status}" %>
-                <% end %>
-
-                <%= tag.div class: "collapse", id: div_fet_id do %>
-                  <%= render "feature_edit" , fid: fet.id %>
-                <% end %>
-
-              <div class="card p-2 alert-warning">
-                <%= content_tag :div do -%>
-                  Attachments:
-                  <% if fet.file.attached? %>
-                    <%= link_to fet.file.filename, rails_blob_path(fet.file, disposition: "attachment")%>
-                  <% else %>
-                    No file attached
+        <% filtered_features = @project.features.where("name LIKE ? or feature_token_id LIKE ?", "%#{ params[:search] }%", "%#{ params[:search] }%") %>
+        <% if filtered_features.count >0 %>
+          <div class="card">
+            <div class="card-body">
+              <% filtered_features.each do |fet| %>
+                <div class="card p-2 alert-warning shadow shadow-regular mb-2 p-5">
+                  <p class="btn btn-outline-info"><%= "Feature Name: #{fet.name} Feature Token:  #{fet.feature_token_id} " %></p>
+                  <p class="btn btn-outline-success"><%= "category:  #{fet.category}" %></p>
+                  <% div_fet_id="editFeature"+fet.feature_token_id.to_s %>
+                  <% hashed_div_fet_id="#"+div_fet_id %>
+                  <%= tag.div class: "mt-1 mb-1 card alert-info", "data-toggle": "collapse", "data-target": hashed_div_fet_id, "aria-expanded": "false", "aria-controls": div_fet_id do %>
+                    &#9658;<%= "Name: #{fet.name}, Id: #{fet.id} status: #{fet.status}" %>
                   <% end %>
-                <% end -%>
 
-                <%= content_tag :div  do -%>
-                  <br>
-                  <%= render plain: "Completed Tasks" if fet.tasks.present? %>
-                  <div class="card-body alert-success">
-                    <% fet.tasks.where("completed =?","1").each do |t| %>
-                      <%= "Task: #{t.name}" %> <%="Completed: #{t.completed}" %>
-                      <br>
-                    <% end %>
+                  <%= tag.div class: "collapse", id: div_fet_id do %>
+                    <%= render "feature_edit" , fid: fet.id %>
+                  <% end %>
+
+                  <div class="card p-2 alert-warning">
+                    <div>
+                      <strong>Attachment:</strong>
+                      <% if fet.file.attached? %>
+                        <%= link_to fet.file.filename, rails_blob_path(fet.file, disposition: "attachment") %>
+                      <% else %>
+                        No file attached
+                      <% end %>
+                    </div>
+
+                    <% completed=fet.tasks.where("completed =?","1").count %>
+                    <% total=fet.tasks.count %>
+                    <div>
+                      <p class="mb-1"> Completed Tasks &#x26A1; <span class="btn btn-success btn-sm"> &#x28;<%= "#{completed}/#{total}" %>&#x29; </span></p>
+                      <% if completed > 0 %>
+                        <div class="card-body alert-success">
+                          <% fet.tasks.where("completed =?","1").each do |t| %>
+                            <%= "Task: #{t.name}" %> &#x2611; <%="Completed: #{t.completed}" %>
+                            <br>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
                   </div>
-                <% end -%>
-              </div>
+                </div>
+              <% end %>
             </div>
-
-            <% end %>
-
           </div>
-        </div>
-
+        <% else %>
+          <h2>Nothing to show here</h2>
+        <% end %>
       </div>
     <% end %>
 
     <div class="col m-0 p-0 collapse show height-dictator" id="card1" >
-
       <%= render partial: "show_panel", locals: { category_name: "Current Iteration", card_no: "1" } %>
-
     </div>
 
     <div class="col m-0 p-0 collapse show height-dictator" id="card2">
       <%= render partial: "show_panel", locals: { category_name: "Backlog", card_no: "2" } %>
-
     </div>
 
     <div class="col m-0 p-0 collapse show height-dictator" id="card3">
       <%= render partial: "show_panel", locals: { category_name: "Icebox", card_no: "3" } %>
-
     </div>
-
   </div>
 
 </div>

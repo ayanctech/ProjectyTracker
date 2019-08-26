@@ -1,5 +1,5 @@
-require 'microsoft_graph_auth'
-require 'oauth2'
+require "microsoft_graph_auth"
+require "oauth2"
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   private
   def current_user
     logger = Rails.logger
-    logger.debug "****#{session[:user_id]}****"
     if session[:user_id] && User.exists?(id: session[:user_id])
       @current_user ||= User.find(session[:user_id])
     end
@@ -50,7 +49,7 @@ class ApplicationController < ActionController::Base
 
   def refresh_tokens(token_hash)
     oauth_strategy = OmniAuth::Strategies::MicrosoftGraphAuth.new(
-      nil, ENV['AZURE_APP_ID'], ENV['AZURE_APP_SECRET']
+      nil, ENV["AZURE_APP_ID"], ENV["AZURE_APP_SECRET"]
     )
 
     token = OAuth2::AccessToken.new(
@@ -88,5 +87,5 @@ class ApplicationController < ActionController::Base
   def auto_generate_id
     SecureRandom.random_number(1_000_000)
   end
-  
+
 end

@@ -3,7 +3,6 @@ class Project < ApplicationRecord
   has_many :features, dependent: :destroy
   has_many :comments, dependent: :destroy
 
-
   validates :title, presence: true, length: { minimum: 4 }
 
   accepts_nested_attributes_for :features, allow_destroy: true

@@ -2,7 +2,6 @@ class ProjectsController < ApplicationController
   before_action :login_required
   before_action :set_project, only: [:edit, :update, :destroy, :show, :find_feature]
 
-
   def search_feature
     @project.features.search(params[:search])
   end
@@ -27,16 +26,13 @@ class ProjectsController < ApplicationController
 
     @feature.tasks.build
     @feature.notifications.build
-
     @comment.notifications.build
-    #binding.pry
+
   end
 
   def create
     @project = Project.new(project_params)
-
     @project.user = current_user
-
     if @project.save
       redirect_to project_path(@project), flash: { success: "Project created Successfully!" }
     else
@@ -48,8 +44,6 @@ class ProjectsController < ApplicationController
   end
 
   def update
-
-    #if @project.update(params[:project].permit(:title, :body))
     if @project.update(project_params)
       redirect_to project_path(@project),flash: { success: "Project Updated Successfully!" }
     else
@@ -59,7 +53,6 @@ class ProjectsController < ApplicationController
 
   def destroy
     @project.destroy
-
     redirect_to projects_path
   end
 
@@ -70,5 +63,5 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:title, :description, :search, features_attributes: [:name,tasks_attributes: [:name]], comments_attributes: [:content])
   end
-
+  
 end
