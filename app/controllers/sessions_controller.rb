@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
         session[:user_id] = user.id
         redirect_to root_path, info: "Logged In!"
       else
-        redirect_to new_user_path, flash: { warning: "PLease confirm your email before login !" }
+        redirect_to new_session_path, flash: { warning: "PLease confirm your email before login !" }
       end
     else
       flash.now[:warning] = "Email or Password invalid !"
@@ -22,5 +22,5 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     redirect_to root_url, notice: "Logged out!"
   end
-  
+
 end

@@ -31,7 +31,7 @@
 
   <div class="row mt-1">
     <% if params[:search].present? && params[:search].strip.length > 0 %>
-      <div class="col-sm-12 mb-5 p-0 collapse show height-dictator" id="card0" >
+      <div class="col-sm-12 col-md-4 mb-5 p-0 collapse show height-dictator" id="card0" >
         <% filtered_features = @project.features.where("name LIKE ? or feature_token_id LIKE ?", "%#{ params[:search] }%", "%#{ params[:search] }%") %>
         <% if filtered_features.count >0 %>
           <div class="card">
@@ -82,19 +82,20 @@
           <h2>Nothing to show here</h2>
         <% end %>
       </div>
+    <% else %>
+
+      <div class="col m-0 p-0 collapse show height-dictator" id="card1" >
+        <%= render partial: "show_panel", locals: { category_name: "Current Iteration", card_no: "1" } %>
+      </div>
+
+      <div class="col m-0 p-0 collapse show height-dictator" id="card2">
+        <%= render partial: "show_panel", locals: { category_name: "Backlog", card_no: "2" } %>
+      </div>
+
+      <div class="col m-0 p-0 collapse show height-dictator" id="card3">
+        <%= render partial: "show_panel", locals: { category_name: "Icebox", card_no: "3" } %>
+      </div>
     <% end %>
-
-    <div class="col m-0 p-0 collapse show height-dictator" id="card1" >
-      <%= render partial: "show_panel", locals: { category_name: "Current Iteration", card_no: "1" } %>
-    </div>
-
-    <div class="col m-0 p-0 collapse show height-dictator" id="card2">
-      <%= render partial: "show_panel", locals: { category_name: "Backlog", card_no: "2" } %>
-    </div>
-
-    <div class="col m-0 p-0 collapse show height-dictator" id="card3">
-      <%= render partial: "show_panel", locals: { category_name: "Icebox", card_no: "3" } %>
-    </div>
   </div>
 
 </div>

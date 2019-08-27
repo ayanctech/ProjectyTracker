@@ -6,4 +6,6 @@ class Feature < ApplicationRecord
   accepts_nested_attributes_for :tasks, allow_destroy: true
   accepts_nested_attributes_for :notifications, allow_destroy: true
 
+  validates :name, presence: true, length: { minimum: 2 }
+
 end

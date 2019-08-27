@@ -1,4 +1,4 @@
-<%= error_messages_for(@project) %>
+<%= error_messages_for(@feature) %>
 <div class="card shadow-sm p-3 mb-5 bg-white rounded">
   <div class="card-body">
     <%= form_for [@project,Feature.find(fid)], class: "form-group", remote: true  do |builder| %>

@@ -1,7 +1,8 @@
 class AdminMailer < ApplicationMailer
   def registration_confirmation(user)
     @user=user
-    mail to: "jmscb56@gmail.com", subject: "Please Confirm your Email Id!"
+    mail to: @user.email, subject: "Please Confirm your Email Id!"
+    # send mail to user
   end
 
   def send_mail(name)

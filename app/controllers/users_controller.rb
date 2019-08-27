@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :login_required
+  before_action :login_required, except: [:new, :create, :confirm_email]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -26,10 +26,14 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update_attributes(user_params)
-      redirect_to user_path(@user), flash: { success: "User Updated Successfully!" }
+    if @user.email != current_user.email
+      redirect_to users_path, flash: { danger: "You cannot update other users!!" }
     else
-      render "edit", flash: { danger: "User updation error!!" }
+      if @user.update_attributes(user_params)
+        redirect_to user_path(@user), flash: { success: "User Updated Successfully!" }
+      else
+        redirect_to user_path(@user), flash: { danger: "User updation error!!" }
+      end
     end
 
   end
@@ -47,6 +51,7 @@ class UsersController < ApplicationController
 
   def confirm_email
     user=User.find_by_confirm_token(params[:id])
+
     if user
       user.email_activate
       session[:user_id] = user.id

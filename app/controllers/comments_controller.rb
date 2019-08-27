@@ -18,11 +18,9 @@ class CommentsController < ApplicationController
         #binding.pry
         name=@comment.content.partition('@').last.partition(" ").first
         AdminMailer.send_mail(name).deliver_later
-        notification=@comment.notifications.create(notify_name: "New Comment mention #{comment_params[:content]}", recipient: name)
-        ActionCable.server.broadcast 'notifications_channel', notification: notification.notify_name, count: Notification.all.count, recipient: name
+        send_mail_notify(3,@comment,comment_params[:content],name)
 
       end
-      #AdminMailer.send_mail("jmscb56@gmail.com").deliver
       redirect_to @project, flash: { success: "commented !" }
     else
       redirect_to @project, flash: { danger: "Comment Creation Failed!!" }

@@ -17,17 +17,16 @@ class FeaturesController < ApplicationController
   def create
     @feature=@project.features.new(feature_params)
     if @feature.save
-      notification=@feature.notifications.create(notify_name: "created Feature #{feature_params[:name]} in Category #{feature_params[:category]}")
-      ActionCable.server.broadcast 'notifications_channel', notification: notification.notify_name, count: Notification.all.count
-
+      send_mail_notify(0,@feature,feature_params[:name],feature_params[:category])
       if feature_params[:tasks_attributes].to_h.length !=0
         start=feature_params[:tasks_attributes].keys[0]
         uid=feature_params[:tasks_attributes][start][:user_id]
-        AdminMailer.send_mail(User.find(uid).name).deliver_later
+        #AdminMailer.send_mail(User.find(uid).name).deliver_later
+        send_email(User.find(uid).name)
       end
       redirect_to @project, flash: { success: "Feature created Successfully!" }
     else
-      render "new"
+      redirect_to @project, flash: { danger: "Feature Creation Failed!!" }
     end
   end
 
@@ -45,23 +44,23 @@ class FeaturesController < ApplicationController
           tp=Task.new(fet)
 
           if t.user_id != tp.user_id || t.name != tp.name || t.completed != tp.completed
-            @notification=@feature.notifications.new(notify_name: "Some change to #{@feature.name}")
-            AdminMailer.send_mail(User.find(fet[:user_id]).name).deliver_later
+            send_mail_notify(1, @feature, feature_params[:name], feature_params[:category])
+
+            send_email(User.find(fet[:user_id]).name)
           end
         else
-          @notification=@feature.notifications.new(notify_name: "change to #{@feature.name}")
-          AdminMailer.send_mail(User.find(fet[:user_id]).name).deliver_later
+          send_mail_notify(1, @feature, feature_params[:name], feature_params[:category])
+
+          send_email(User.find(fet[:user_id]).name)
         end
       end
     end
 
     if @feature.update_attributes(feature_params)
-      unless @notification.nil?
-        ActionCable.server.broadcast 'notifications_channel', notification: @notification.notify_name, count: Notification.all.count
-      end
+
       redirect_to @project, flash: { success: "Feature Updated Successfully!" }
     else
-      render "edit", flash: { danger: "Feature updation error!!" }
+      redirect_to @project, flash: { danger: "Feature Updatation Failed!!" }
     end
   end
 
@@ -76,8 +75,13 @@ class FeaturesController < ApplicationController
     @project=Project.find(params[:project_id])
   end
 
+
+  def send_email(uname)
+    AdminMailer.send_mail(uname).deliver_later
+  end
+
   def feature_params
     params.require(:feature).permit(:name, :desc, :category, :file, :status, :feature_token_id, notifications_attributes: [:notify_name], tasks_attributes: [:name,:completed, :user_id, :id])
   end
-  
+
 end

@@ -88,4 +88,15 @@ class ApplicationController < ActionController::Base
     SecureRandom.random_number(1_000_000)
   end
 
+  def send_mail_notify(i,obj,content,val)
+    if i==0
+      notification=obj.notifications.create(notify_name: "created Feature #{content} in Category #{val}")
+    elsif i==1
+      notification=obj.notifications.create(notify_name: "Some change to #{content} in Category #{val}")
+    else
+      notification=obj.notifications.create(notify_name: "New Comment mention #{content}", recipient: val )
+    end
+    ActionCable.server.broadcast 'notifications_channel', notification: notification.notify_name, count: Notification.all.count
+  end
+
 end
