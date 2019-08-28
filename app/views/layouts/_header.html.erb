@@ -1,6 +1,6 @@
 <script>
   $(document).on("turbolinks:load", function () {
-    $('.nav-item a[href="' + this.location.pathname + '"]').parent().addClass('active');
+    $('.nav-item-li a[href="' + this.location.pathname + '"]').parent().addClass('active');
   });
 </script>
 <header>
@@ -9,10 +9,10 @@
       <span class="navbar-brand h1 a">Project Manager</span>
 
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item p-1" id="project-nav">
+        <li class="nav-item-li p-2" id="project-nav">
           <%= link_to "Project", projects_path, class: "nav-link" %>
         </li>
-        <li class="nav-item p-1" id="user-nav">
+        <li class="nav-item-li p-2" id="user-nav">
           <%= link_to "Users", users_path, class: "nav-link" %>
         </li>
 
