@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2019_08_27_094053) do
 
-  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "comments", force: :cascade do |t|
     t.string "content", null: false
     t.string "commenter_name", null: false
     t.bigint "user_id"
@@ -45,7 +48,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "features", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "features", force: :cascade do |t|
     t.string "name", null: false
     t.string "desc"
     t.string "feature_token_id"
@@ -57,7 +60,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["project_id"], name: "index_features_on_project_id"
   end
 
-  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "notifications", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "notify_name", null: false
@@ -68,7 +71,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["feature_id"], name: "index_notifications_on_feature_id"
   end
 
-  create_table "projects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "projects", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
     t.bigint "user_id"
@@ -78,7 +81,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
-  create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at", null: false
@@ -87,7 +90,7 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "tasks", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "completed"
     t.bigint "feature_id"
@@ -95,10 +98,9 @@ ActiveRecord::Schema.define(version: 2019_08_27_094053) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["feature_id"], name: "index_tasks_on_feature_id"
-    t.index ["user_id"], name: "fk_rails_4d2a9e4d7e"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "provider"
     t.string "uid"
     t.string "name", null: false
