@@ -9,13 +9,22 @@
 # And be sure to use new-style password hashing:
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
+#######FOR MYSQL#######
+# default: &default
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   username: root
+#   password: root
+#   socket: /var/run/mysqld/mysqld.sock
+
+#####FOR POSTGRES#######
 default: &default
-  adapter: mysql2
-  encoding: utf8
+  adapter: postgresql
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: root
-  socket: /var/run/mysqld/mysqld.sock
+  username: postgres
+  password: postgres
 
 development:
   <<: *default
@@ -47,8 +56,11 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+# production:
+#   <<: *default
+#   database: auth_system_production
+#   username: auth_system
+#   password: <%= ENV['AUTH_SYSTEM_DATABASE_PASSWORD'] %>
+
 production:
-  <<: *default
-  database: auth_system_production
-  username: auth_system
-  password: <%= ENV['AUTH_SYSTEM_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
